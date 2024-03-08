@@ -11,6 +11,13 @@ class Conexion:
         for row in datos:
             aux=aux + str(row) + "\n"
         return aux
+    
+    def Reporte_Usuario(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM usuarios")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
 
     def Consulta_Usuario(self):
         cur = self.conexion.cursor()
@@ -70,16 +77,23 @@ class Conexion:
         cur.close()    
         return datos
     
-    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario):
+    def Reporte_Clientes(self):
         cur = self.conexion.cursor()
-        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario) VALUES('{}','{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario)
+        cur.execute("SELECT * FROM clientes")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+    
+    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario ):
+        cur = self.conexion.cursor()
+        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario) VALUES('{}','{}', '{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario)
         cur.execute(query)
         n = cur.rowcount
         self.conexion.commit()
         cur.close()
         return n
     
-    def Modificar_Cliente(self,nombre, apellidoPaterno, apellidoMaterno, idUsuario, id):
+    def Modificar_Cliente(self,nombre, apellidoPaterno, apellidoMaterno, idUsuario, id, ):
         cur = self.conexion.cursor()
         sql='''UPDATE clientes SET NOMBRE_CLIENTE='{}', APELLIDOP_CLIENTE='{}', APELLIDOM_CLIENTE='{}', ID_Usuario='{}' WHERE ID_CLIENTE={}'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, id)
         cur.execute(sql)
@@ -155,6 +169,12 @@ class Conexion:
         self.conexion.commit()    
         cur.close()
         return dato  
+    def Reporte_Vehiculos(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM vehiculos")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
     
     def Buscar_Vehiculo(self, id):
         cur = self.conexion.cursor()

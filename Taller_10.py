@@ -1,7 +1,10 @@
 import tkinter as tk
 import customtkinter as ctk
 from tkinter import END, messagebox
+from tkinter import filedialog
+from PIL import Image, ImageTk
 from conexion1 import *
+from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape 
@@ -177,6 +180,8 @@ def usuarios(tab_usuarios):
     btnEditar.place(x=361, y=400)
     btnRemover = ctk.CTkButton(tab_usuarios, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarUsuario())
     btnRemover.place(x=476, y=400)
+    btnReporte = ctk.CTkButton(tab_usuarios, text="Reporte",width=100, height=30,command=lambda:Reporte_Usuarios())
+    btnReporte.place(x=360, y=300)
 
     #menu
     opcion=["None","Admin", "Gerente", "Secretaria","Mecanico"]
@@ -223,6 +228,47 @@ def usuarios(tab_usuarios):
 
     '''Acciones de los Usuarios'''
     #Registrar nuevo usuario
+
+
+
+    def Reporte_Usuarios():
+        usuario = Conexion()
+        registros = usuario.Reporte_Usuario()  # Asegúrate de tener un método Reporte_Usuarios en tu clase de conexión
+        pdf_filename = f'reporte_usuarios_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
+        
+        # Configuración del PDF
+        c = canvas.Canvas(pdf_filename, pagesize=letter)
+        width, height = letter
+        
+        # Encabezado de la tabla
+        encabezado = ["ID_Usuario", "Nombre", "Apellido Paterno", "Apellido Materno", "Perfil de usuario"]
+        
+        # Calcula el ancho de las columnas
+        col_width = width / len(encabezado)
+        
+        # Tamaño de fuente más pequeño para el encabezado
+        c.setFont("Helvetica", 7)
+        
+        # Escribe el encabezado centrado
+        for i, columna in enumerate(encabezado):
+            x = i * col_width + col_width / 2
+            y = height - 15
+            c.drawCentredString(x, y, columna)
+        
+        # Escribe los registros centrados
+        for fila_num, fila in enumerate(registros):
+            fila_num += 1
+            for col_num, valor in enumerate(fila):
+                x = col_num * col_width + col_width / 2
+                y = height - (20 + fila_num * 20)
+                c.drawCentredString(x, y, str(valor))
+        
+        # Guarda el archivo PDF
+        c.save()
+
+        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+
+
     def NuevoUsuario():
         global tipo_guardado
         estado(True)
@@ -357,6 +403,7 @@ def clientes(tab_clientes):
     ctk.CTkLabel(tab_clientes, text="Nombre: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=130, y=150)
     ctk.CTkLabel(tab_clientes, text="Apellido paterno: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=62, y=190)
     ctk.CTkLabel(tab_clientes, text="Apellido materno: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=59, y=230)
+    ctk.CTkLabel(tab_clientes, text="          Perfil: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=100, y=270)
 
     #Entradas
     txtIdCliente = ctk.CTkEntry(tab_clientes, justify="center",width=60,height=10)
@@ -367,6 +414,17 @@ def clientes(tab_clientes):
     txtApPaternoC.place(x=210,y=195)
     txtApMaternoC = ctk.CTkEntry(tab_clientes, justify="center",width=150,height=10)
     txtApMaternoC.place(x=210,y=235)
+
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_clientes,text="", image=imagen_perfil_default)
+    lblImagen.place(x=210, y=270)
+
+    btnCargarImagen = ctk.CTkButton(tab_clientes, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen(lblImagen))
+    btnCargarImagen.place(x=360, y=270)
+
 
     #Botones
     btnBuscar = ctk.CTkButton(tab_clientes, text="Buscar",width=80, height=10, command=lambda:BuscarCliente())
@@ -381,7 +439,8 @@ def clientes(tab_clientes):
     btnEditar.place(x=361, y=400)
     btnRemover = ctk.CTkButton(tab_clientes, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarCliente())
     btnRemover.place(x=476, y=400)
-
+    btnReporte = ctk.CTkButton(tab_clientes, text="Reporte",width=100, height=30,command=lambda:Reporte_Clientes())
+    btnReporte.place(x=360, y=300)
     global global_clientes
     usuarios = Conexion()
     datos = usuarios.Buscar_Clientes_Usuario(perfil)  # Ahora pasa el ID del usuario actual
@@ -425,6 +484,45 @@ def clientes(tab_clientes):
         txtApPaternoC.delete(0,END)
         txtApMaternoC.delete(0,END)
         mIdCliente.set(valores[0])
+    
+    def Reporte_Clientes():
+        usuario = Conexion()
+        registros = usuario.Reporte_Clientes()  # Asegúrate de tener un método Reporte_Clientes en tu clase de conexión
+        pdf_filename = 'tabla_Clientes.pdf'
+        
+        # Configuración del PDF
+        c = canvas.Canvas(pdf_filename, pagesize=letter)
+        width, height = letter
+        
+        # Encabezado de la tabla
+        encabezado = ["NOMBRE_CLIENTE", "APELLIDO PATERNO", "APELLIDO MATERNO", "ID_Usuario"]
+        
+        # Calcula el ancho de las columnas
+        col_width = width / len(encabezado)
+        
+        # Tamaño de fuente más pequeño para el encabezado
+        c.setFont("Helvetica", 7)
+        
+        # Escribe el encabezado centrado
+        for i, columna in enumerate(encabezado):
+            x = i * col_width + col_width / 2
+            y = height - 15
+            c.drawCentredString(x, y, columna)
+        
+        # Escribe los registros centrados
+        for fila_num, fila in enumerate(registros):
+            fila_num += 1
+            for col_num, valor in enumerate(fila):
+                x = col_num * col_width + col_width / 2
+                y = height - (20 + fila_num * 20)
+                c.drawCentredString(x, y, str(valor))
+        
+        # Guarda el archivo PDF
+        c.save()
+
+        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+
+
 
     def BuscarCliente():
         estado(True)
@@ -457,6 +555,19 @@ def clientes(tab_clientes):
         btnSalvar.configure(state="active")
         btnCancelar.configure(state="active")
         tipo_guardado = "nuevo"
+    
+
+    
+    def cargar_imagen(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
 
     def GuardarCliente():
         usuario = Conexion()
@@ -515,6 +626,7 @@ def clientes(tab_clientes):
         btnCancelar.configure(state="active")
         tipo_guardado = "editar"
         btnEditar.configure(state="disabled")
+        cargar_imagen(lblImagen)
 
     def EliminarCliente():
         usuario = Conexion()
@@ -571,6 +683,8 @@ def vehiculo(tab_vehiculo):
     btnEditarV.place(x=361, y=400)
     btnRemoverV = ctk.CTkButton(tab_vehiculo, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarVehiculo())
     btnRemoverV.place(x=476, y=400)
+    btnReporteV = ctk.CTkButton(tab_vehiculo, text="Reporte",width=100, height=30,command=lambda:Reporte_Vehiculos())
+    btnReporteV.place(x=360, y=300)
 
     #Opciones
     global global_clientes
@@ -605,6 +719,47 @@ def vehiculo(tab_vehiculo):
     else:
         mIdVehiculo.set("None")
     global_clientes = mIdCliente.get()
+
+
+    def Reporte_Vehiculos():
+        usuario = Conexion()
+        registros = usuario.Reporte_Vehiculos()  # Asegúrate de tener un método Reporte_Vehiculos en tu clase de conexión
+        pdf_filename = f'reporte_vehiculos_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
+        
+        # Configuración del PDF
+        c = canvas.Canvas(pdf_filename, pagesize=letter)
+        width, height = letter
+        
+        # Encabezado de la tabla
+        encabezado = ["ID_VEHICULO", "MATRICULA", "MARCA", "MODELO", "FECHA"]
+        
+        # Calcula el ancho de las columnas
+        col_width = width / len(encabezado)
+        
+        # Tamaño de fuente más pequeño para el encabezado
+        c.setFont("Helvetica", 7)
+        
+        # Escribe el encabezado centrado
+        for i, columna in enumerate(encabezado):
+            x = i * col_width + col_width / 2
+            y = height - 15
+            c.drawCentredString(x, y, columna)
+        
+        # Escribe los registros centrados
+        for fila_num, fila in enumerate(registros):
+            fila_num += 1
+            for col_num, valor in enumerate(fila):
+                x = col_num * col_width + col_width / 2
+                y = height - (20 + fila_num * 20)
+                c.drawCentredString(x, y, str(valor))
+        
+        # Guarda el archivo PDF
+        c.save()
+
+        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+
+
+
 
     def estado(est):
         if est == True:
