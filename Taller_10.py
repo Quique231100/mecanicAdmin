@@ -21,14 +21,14 @@ ctk.set_default_color_theme("blue")
 # Configurar ventana principal
 root = ctk.CTk()
 root.title("Taller Mecánico")
-root.geometry(f"{600}x{350}")
+root.geometry(f"{1000}x{750}")
 
 #Ventana de Login
 def login():
     #Limpia y cambia el tamaño de la ventana 
     for widget in root.winfo_children():
                 widget.destroy()
-    root.geometry(f"{600}x{350}")
+    root.geometry(f"{1000}x{750}")
 
     usuario = Conexion()
     #Etiquetas Login
@@ -80,7 +80,7 @@ def login():
 
                 #Boton Log Out
                 btnCerrarS = ctk.CTkButton(root, text="Log out",width=50, height=15,command=lambda:login())
-                btnCerrarS.place(x=540,y=0)
+                btnCerrarS.place(x=900,y=0)
                 lblUsuario = ctk.CTkLabel(root, text=user+": "+nombre,font=ctk.CTkFont(size=12, weight="bold")).place(x=0, y=0)
             elif user == "Gerente":
                 for widget in root.winfo_children():
@@ -94,7 +94,7 @@ def login():
                 tab_reparacionesG = pestanas.add("Reparaciones")
                 Reparacion_Gerente(tab_reparacionesG)
                 btnCerrarS = ctk.CTkButton(root, text="Log out",width=50, height=15,command=lambda:login())
-                btnCerrarS.place(x=540,y=0)
+                btnCerrarS.place(x=900,y=0)
                 lblUsuario = ctk.CTkLabel(root, text=user+": "+nombre,font=ctk.CTkFont(size=12, weight="bold")).place(x=0, y=0)
             elif user == "Secretaria":
                 for widget in root.winfo_children():
@@ -133,7 +133,7 @@ login()
 
 #Contenido de pestaña usuarios
 def usuarios(tab_usuarios):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     lblIDBuscar = ctk.CTkLabel(tab_usuarios, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold"))
     lblIDBuscar.place(x=95, y=15)
@@ -395,7 +395,7 @@ def usuarios(tab_usuarios):
 
 #Contenido de pestaña clientes
 def clientes(tab_clientes):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     #ctk.CTkLabel(tab_clientes, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_clientes, text="Seleccione ID Cliente: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=20, y=15)
@@ -646,7 +646,7 @@ def clientes(tab_clientes):
 
 #Contenido de pestaña vehiculo
 def vehiculo(tab_vehiculo):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_vehiculo, text="Seleccione cliente: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_vehiculo, text="Seleccione vehiculo: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=20, y=65)
@@ -930,7 +930,7 @@ def vehiculo(tab_vehiculo):
 
 #Contenido de pestaña reparaciones
 def Reparacion_Mecanico(tab_reparacionesM):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparacionesM, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparacionesM, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -970,7 +970,7 @@ def Reparacion_Mecanico(tab_reparacionesM):
     btnCancelarR = ctk.CTkButton(tab_reparacionesM, text="Cancelar",width=100, height=30, state="disabled", command=lambda:Cancelar())
     btnCancelarR.place(x=246, y=400)
     btnReporteR = ctk.CTkButton(tab_reparacionesM, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1217,7 +1217,7 @@ def Reparacion_Mecanico(tab_reparacionesM):
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
 def Reparacion_Gerente(tab_reparacionesG):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparacionesG, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparacionesG, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -1257,7 +1257,7 @@ def Reparacion_Gerente(tab_reparacionesG):
     btnEditarR = ctk.CTkButton(tab_reparacionesG, text="Editar",width=100, height=30, state="disabled", command=lambda:ActualizarReparacion())
     btnEditarR.place(x=361, y=400)
     btnReporteR = ctk.CTkButton(tab_reparacionesG, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1496,7 +1496,7 @@ def Reparacion_Gerente(tab_reparacionesG):
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
 def reparaciones(tab_reparaciones):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparaciones, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparaciones, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -1540,7 +1540,7 @@ def reparaciones(tab_reparaciones):
     btnRemoverR = ctk.CTkButton(tab_reparaciones, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarReparacion())
     btnRemoverR.place(x=476, y=400)
     btnReporteR = ctk.CTkButton(tab_reparaciones, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1803,7 +1803,7 @@ def reparaciones(tab_reparaciones):
 
 #Contenido de pestaña piezas
 def piezas(tab_piezas):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_piezas, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_piezas, text="       Pieza ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=42, y=105)
@@ -1833,7 +1833,7 @@ def piezas(tab_piezas):
     btnRemoverP = ctk.CTkButton(tab_piezas, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarPieza())
     btnRemoverP.place(x=476, y=400)
     btnReporteR = ctk.CTkButton(tab_piezas, text="ReporteP",width=100, height=30, command=lambda:Reporte_Piezas())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
 
     def estado(est):
         if est == True:
