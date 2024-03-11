@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import END, messagebox
+from tkinter import END, messagebox, ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from conexion1 import *
@@ -21,14 +21,14 @@ ctk.set_default_color_theme("blue")
 # Configurar ventana principal
 root = ctk.CTk()
 root.title("Taller Mecánico")
-root.geometry(f"{600}x{350}")
+root.geometry(f"{1000}x{750}")
 
 #Ventana de Login
 def login():
     #Limpia y cambia el tamaño de la ventana 
     for widget in root.winfo_children():
                 widget.destroy()
-    root.geometry(f"{600}x{350}")
+    root.geometry(f"{1000}x{750}")
 
     usuario = Conexion()
     #Etiquetas Login
@@ -80,7 +80,7 @@ def login():
 
                 #Boton Log Out
                 btnCerrarS = ctk.CTkButton(root, text="Log out",width=50, height=15,command=lambda:login())
-                btnCerrarS.place(x=540,y=0)
+                btnCerrarS.place(x=900,y=0)
                 lblUsuario = ctk.CTkLabel(root, text=user+": "+nombre,font=ctk.CTkFont(size=12, weight="bold")).place(x=0, y=0)
             elif user == "Gerente":
                 for widget in root.winfo_children():
@@ -94,7 +94,7 @@ def login():
                 tab_reparacionesG = pestanas.add("Reparaciones")
                 Reparacion_Gerente(tab_reparacionesG)
                 btnCerrarS = ctk.CTkButton(root, text="Log out",width=50, height=15,command=lambda:login())
-                btnCerrarS.place(x=540,y=0)
+                btnCerrarS.place(x=900,y=0)
                 lblUsuario = ctk.CTkLabel(root, text=user+": "+nombre,font=ctk.CTkFont(size=12, weight="bold")).place(x=0, y=0)
             elif user == "Secretaria":
                 for widget in root.winfo_children():
@@ -133,7 +133,7 @@ login()
 
 #Contenido de pestaña usuarios
 def usuarios(tab_usuarios):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     lblIDBuscar = ctk.CTkLabel(tab_usuarios, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold"))
     lblIDBuscar.place(x=95, y=15)
@@ -167,6 +167,16 @@ def usuarios(tab_usuarios):
     txtPass = ctk.CTkEntry(tab_usuarios, justify="center",width=200,height=10,show="*")
     txtPass.place(x=170,y=346)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_usuarios,text="", image=imagen_perfil_default)
+    lblImagen.place(x=360, y=130)
+
+    btnCargarImagen = ctk.CTkButton(tab_usuarios, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_usuario(lblImagen))
+    btnCargarImagen.place(x=400, y=130)
+
     #Botones
     btnBuscar = ctk.CTkButton(tab_usuarios, text="Buscar",width=80, height=10, command=lambda:BuscarUsuario())
     btnBuscar.place(x=415, y=19)
@@ -181,7 +191,7 @@ def usuarios(tab_usuarios):
     btnRemover = ctk.CTkButton(tab_usuarios, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarUsuario())
     btnRemover.place(x=476, y=400)
     btnReporte = ctk.CTkButton(tab_usuarios, text="Reporte",width=100, height=30,command=lambda:Reporte_Usuarios())
-    btnReporte.place(x=360, y=300)
+    btnReporte.place(x=600, y=400)
 
     #menu
     opcion=["None","Admin", "Gerente", "Secretaria","Mecanico"]
@@ -276,6 +286,17 @@ def usuarios(tab_usuarios):
         btnSalvar.configure(state="active")
         btnCancelar.configure(state="active")
         tipo_guardado = "nuevo"
+
+    def cargar_imagen_usuario(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
 
     #Guardar Usuario
     def SalvarUsuario():
@@ -395,7 +416,7 @@ def usuarios(tab_usuarios):
 
 #Contenido de pestaña clientes
 def clientes(tab_clientes):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     #ctk.CTkLabel(tab_clientes, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_clientes, text="Seleccione ID Cliente: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=20, y=15)
@@ -422,7 +443,7 @@ def clientes(tab_clientes):
     lblImagen = ctk.CTkLabel(tab_clientes,text="", image=imagen_perfil_default)
     lblImagen.place(x=210, y=270)
 
-    btnCargarImagen = ctk.CTkButton(tab_clientes, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen(lblImagen))
+    btnCargarImagen = ctk.CTkButton(tab_clientes, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_cliente(lblImagen))
     btnCargarImagen.place(x=360, y=270)
 
 
@@ -440,7 +461,7 @@ def clientes(tab_clientes):
     btnRemover = ctk.CTkButton(tab_clientes, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarCliente())
     btnRemover.place(x=476, y=400)
     btnReporte = ctk.CTkButton(tab_clientes, text="Reporte",width=100, height=30,command=lambda:Reporte_Clientes())
-    btnReporte.place(x=360, y=300)
+    btnReporte.place(x=600, y=400)
     global global_clientes
     usuarios = Conexion()
     datos = usuarios.Buscar_Clientes_Usuario(perfil)  # Ahora pasa el ID del usuario actual
@@ -558,7 +579,7 @@ def clientes(tab_clientes):
     
 
     
-    def cargar_imagen(label):
+    def cargar_imagen_cliente(label):
         ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
         if ruta_imagen:
             imagen = Image.open(ruta_imagen)
@@ -646,7 +667,7 @@ def clientes(tab_clientes):
 
 #Contenido de pestaña vehiculo
 def vehiculo(tab_vehiculo):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_vehiculo, text="Seleccione cliente: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_vehiculo, text="Seleccione vehiculo: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=20, y=65)
@@ -668,6 +689,16 @@ def vehiculo(tab_vehiculo):
     txtFechaEntradaV = ctk.CTkEntry(tab_vehiculo, justify="center",width=150,height=10, placeholder_text="DD/MM/AAAA")
     txtFechaEntradaV.place(x=190,y=275)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_vehiculo,text="", image=imagen_perfil_default)
+    lblImagen.place(x=420, y=130)
+
+    btnCargarImagen = ctk.CTkButton(tab_vehiculo, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_vehiculo(lblImagen))
+    btnCargarImagen.place(x=470, y=130)
+
     #Botones
     btnBuscarV = ctk.CTkButton(tab_vehiculo, text="Buscar",width=80, height=10, command=lambda:BuscarVehiculoC())
     btnBuscarV.place(x=415, y=19)
@@ -684,7 +715,7 @@ def vehiculo(tab_vehiculo):
     btnRemoverV = ctk.CTkButton(tab_vehiculo, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarVehiculo())
     btnRemoverV.place(x=476, y=400)
     btnReporteV = ctk.CTkButton(tab_vehiculo, text="Reporte",width=100, height=30,command=lambda:Reporte_Vehiculos())
-    btnReporteV.place(x=360, y=300)
+    btnReporteV.place(x=600, y=400)
 
     #Opciones
     global global_clientes
@@ -836,6 +867,17 @@ def vehiculo(tab_vehiculo):
         btnCancelarV.configure(state="active")
         tipo_guardado = "nuevo"
 
+    def cargar_imagen_vehiculo(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
+
     def GuardarVehiculo():
         usuario = Conexion()
         if tipo_guardado == "nuevo":
@@ -930,7 +972,7 @@ def vehiculo(tab_vehiculo):
 
 #Contenido de pestaña reparaciones
 def Reparacion_Mecanico(tab_reparacionesM):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparacionesM, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparacionesM, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -956,6 +998,16 @@ def Reparacion_Mecanico(tab_reparacionesM):
     txtCantidad = ctk.CTkEntry(tab_reparacionesM, justify="center",width=150,height=10)
     txtCantidad.place(x=170,y=355)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_reparacionesM,text="", image=imagen_perfil_default)
+    lblImagen.place(x=420, y=130)
+
+    btnCargarImagen = ctk.CTkButton(tab_reparacionesM, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_reparacion(lblImagen))
+    btnCargarImagen.place(x=470, y=130)
+
     #Botones
     btnBuscarRC = ctk.CTkButton(tab_reparacionesM, text="Buscar",width=80, height=10, command=lambda:BuscarClienteR())
     btnBuscarRC.place(x=415, y=19)
@@ -970,7 +1022,7 @@ def Reparacion_Mecanico(tab_reparacionesM):
     btnCancelarR = ctk.CTkButton(tab_reparacionesM, text="Cancelar",width=100, height=30, state="disabled", command=lambda:Cancelar())
     btnCancelarR.place(x=246, y=400)
     btnReporteR = ctk.CTkButton(tab_reparacionesM, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1091,6 +1143,17 @@ def Reparacion_Mecanico(tab_reparacionesM):
         btnSalvarR.configure(state="active")
         btnCancelarR.configure(state="active")
         tipo_guardado = "nuevo"
+
+    def cargar_imagen_reparacion(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
 
     def GuardarReparacion():
         usuario = Conexion()
@@ -1217,7 +1280,7 @@ def Reparacion_Mecanico(tab_reparacionesM):
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
 def Reparacion_Gerente(tab_reparacionesG):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparacionesG, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparacionesG, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -1243,6 +1306,16 @@ def Reparacion_Gerente(tab_reparacionesG):
     txtCantidad = ctk.CTkEntry(tab_reparacionesG, justify="center",width=150,height=10)
     txtCantidad.place(x=170,y=355)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_reparacionesG,text="", image=imagen_perfil_default)
+    lblImagen.place(x=420, y=130)
+
+    btnCargarImagen = ctk.CTkButton(tab_reparacionesG, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_reparacion(lblImagen))
+    btnCargarImagen.place(x=470, y=130)
+
     #Botones
     btnBuscarRC = ctk.CTkButton(tab_reparacionesG, text="Buscar",width=80, height=10, command=lambda:BuscarClienteR())
     btnBuscarRC.place(x=415, y=19)
@@ -1257,7 +1330,7 @@ def Reparacion_Gerente(tab_reparacionesG):
     btnEditarR = ctk.CTkButton(tab_reparacionesG, text="Editar",width=100, height=30, state="disabled", command=lambda:ActualizarReparacion())
     btnEditarR.place(x=361, y=400)
     btnReporteR = ctk.CTkButton(tab_reparacionesG, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1347,7 +1420,17 @@ def Reparacion_Gerente(tab_reparacionesG):
         valores = [str((id)[0]) for id in datosV]
         mIdReparacion.configure(values=valores)
 
-
+    def cargar_imagen_reparacion(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
+    
     def BuscarReparacion():
         estado(True)
         idRep = mIdReparacion.get()
@@ -1496,7 +1579,7 @@ def Reparacion_Gerente(tab_reparacionesG):
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
 def reparaciones(tab_reparaciones):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_reparaciones, text="Seleccione ID cliente a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=10, y=15)
     ctk.CTkLabel(tab_reparaciones, text="    Vehiculo ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=30, y=65)
@@ -1522,6 +1605,16 @@ def reparaciones(tab_reparaciones):
     txtCantidad = ctk.CTkEntry(tab_reparaciones, justify="center",width=150,height=10)
     txtCantidad.place(x=170,y=355)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_reparaciones,text="", image=imagen_perfil_default)
+    lblImagen.place(x=420, y=315)
+
+    btnCargarImagen = ctk.CTkButton(tab_reparaciones, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_reparacion(lblImagen))
+    btnCargarImagen.place(x=470, y=315)
+
     #Botones
     btnBuscarRC = ctk.CTkButton(tab_reparaciones, text="Buscar",width=80, height=10, command=lambda:BuscarClienteR())
     btnBuscarRC.place(x=415, y=19)
@@ -1540,7 +1633,7 @@ def reparaciones(tab_reparaciones):
     btnRemoverR = ctk.CTkButton(tab_reparaciones, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarReparacion())
     btnRemoverR.place(x=476, y=400)
     btnReporteR = ctk.CTkButton(tab_reparaciones, text="Reporte",width=100, height=30, command=lambda:Reporte_Reparacion())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
     
     #Opciones
     global global_clientes
@@ -1637,7 +1730,17 @@ def reparaciones(tab_reparaciones):
         valores = [str((id)[0]) for id in datosV]
         mIdReparacion.configure(values=valores)
 
-
+    def cargar_imagen_reparacion(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
+    
     def BuscarReparacion():
         estado(True)
         idRep = mIdReparacion.get()
@@ -1767,6 +1870,32 @@ def reparaciones(tab_reparaciones):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
+    def Mostrar_Datos_Tabla_Reparacion():
+        usuario = Conexion()
+        registros = usuario.Reporte_Reparacion()
+
+        #Creacion de treeView
+        tree = ttk.Treeview(tab_reparaciones)
+        tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
+        tree.heading("#0", text="ID_REPARACION")
+        tree.heading("#1", text="ID_PIEZA")
+        tree.heading("#2", text="FECHA_ENTRADA")
+        tree.heading("#3", text="FECHA_SALIDA")
+        tree.heading("#4", text="FALLA")
+        tree.heading("#5", text="CANT_PIEZAS")
+        tree.heading("#6", text="ID_VEHICULO")
+
+        for fila in registros:
+            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]))
+
+        yscroll = ttk.Scrollbar(tab_reparaciones, orient='vertical', command=tree.yview)
+        xscroll = ttk.Scrollbar(tab_reparaciones, orient='horizontal', command=tree.xview)
+    
+        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
+        tree.place(x=475, y=100, width=500, height=175)
+        yscroll.place(x=475, y=90, height=175)
+        xscroll.place(x=475, y=90, width=500)
+    
     def Reporte_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -1801,9 +1930,11 @@ def reparaciones(tab_reparaciones):
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
+    Mostrar_Datos_Tabla_Reparacion()
+
 #Contenido de pestaña piezas
 def piezas(tab_piezas):
-    root.geometry(f"{600}x{500}")
+    root.geometry(f"{1000}x{750}")
     #Etiquetas
     ctk.CTkLabel(tab_piezas, text="Ingrese ID a buscar: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=95, y=15)
     ctk.CTkLabel(tab_piezas, text="       Pieza ID: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=42, y=105)
@@ -1819,6 +1950,16 @@ def piezas(tab_piezas):
     txtStock = ctk.CTkEntry(tab_piezas, justify="center",width=150,height=10)
     txtStock.place(x=170,y=250)
 
+    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
+    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+
+    lblImagen = ctk.CTkLabel(tab_piezas,text="", image=imagen_perfil_default)
+    lblImagen.place(x=170, y=320)
+
+    btnCargarImagen = ctk.CTkButton(tab_piezas, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_piezas(lblImagen))
+    btnCargarImagen.place(x=200, y=320)
+
     #Botones
     btnBuscarP = ctk.CTkButton(tab_piezas, text="Buscar",width=80, height=10, command=lambda:BuscarPieza())
     btnBuscarP.place(x=415, y=19)
@@ -1833,7 +1974,7 @@ def piezas(tab_piezas):
     btnRemoverP = ctk.CTkButton(tab_piezas, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarPieza())
     btnRemoverP.place(x=476, y=400)
     btnReporteR = ctk.CTkButton(tab_piezas, text="ReporteP",width=100, height=30, command=lambda:Reporte_Piezas())
-    btnReporteR.place(x=476, y=200)
+    btnReporteR.place(x=600, y=400)
 
     def estado(est):
         if est == True:
@@ -1884,6 +2025,17 @@ def piezas(tab_piezas):
         btnCancelarP.configure(state="active")
         tipo_guardado = "nuevo"
 
+    def cargar_imagen_piezas(label):
+        ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
+        if ruta_imagen:
+            imagen = Image.open(ruta_imagen)
+            imagen = imagen.resize((100, 100), Image.BICUBIC)
+            imagen_perfil = ctk.CTkImage(imagen)
+            label.configure(image=imagen_perfil)
+            label.image = imagen_perfil
+        else:
+            messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
+    
     def GuardarPieza():
         usuario = Conexion()
         if tipo_guardado == "nuevo":
@@ -1951,6 +2103,28 @@ def piezas(tab_piezas):
         btnCancelarP.configure(state="disabled")
         btnRemoverP.configure(state="disabled")
 
+    def Mostrar_Datos_Tabla_Piezas():
+        usuario = Conexion()
+        registros = usuario.Reporte_Piezas()
+
+        #Creacion de treeView
+        tree = ttk.Treeview(tab_piezas)
+        tree["columns"] = ("#1", "#2")
+        tree.heading("#0", text="ID_PIEZA")
+        tree.heading("#1", text="DESCRIPCION_PIEZA")
+        tree.heading("#2", text="STOCK")
+
+        for fila in registros:
+            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2]))
+
+        yscroll = ttk.Scrollbar(tab_piezas, orient='vertical', command=tree.yview)
+        xscroll = ttk.Scrollbar(tab_piezas, orient='horizontal', command=tree.xview)
+    
+        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
+        tree.place(x=475, y=100, width=500, height=175)
+        yscroll.place(x=475, y=90, height=175)
+        xscroll.place(x=475, y=90, width=500)
+    
     def Reporte_Piezas():
         usuario = Conexion()
         registros = usuario.Reporte_Piezas()
@@ -1984,6 +2158,7 @@ def piezas(tab_piezas):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+    Mostrar_Datos_Tabla_Piezas()
 
 root.mainloop()
 
