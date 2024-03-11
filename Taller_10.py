@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import END, messagebox
+from tkinter import END, messagebox, ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 from conexion1 import *
@@ -1767,6 +1767,32 @@ def reparaciones(tab_reparaciones):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
+    def Mostrar_Datos_Tabla_Reparacion():
+        usuario = Conexion()
+        registros = usuario.Reporte_Reparacion()
+
+        #Creacion de treeView
+        tree = ttk.Treeview(tab_reparaciones)
+        tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
+        tree.heading("#0", text="ID_REPARACION")
+        tree.heading("#1", text="ID_PIEZA")
+        tree.heading("#2", text="FECHA_ENTRADA")
+        tree.heading("#3", text="FECHA_SALIDA")
+        tree.heading("#4", text="FALLA")
+        tree.heading("#5", text="CANT_PIEZAS")
+        tree.heading("#6", text="ID_VEHICULO")
+
+        for fila in registros:
+            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]))
+
+        yscroll = ttk.Scrollbar(tab_reparaciones, orient='vertical', command=tree.yview)
+        xscroll = ttk.Scrollbar(tab_reparaciones, orient='horizontal', command=tree.xview)
+    
+        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
+        tree.place(x=475, y=100, width=500, height=175)
+        yscroll.place(x=475, y=90, height=175)
+        xscroll.place(x=475, y=90, width=500)
+    
     def Reporte_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -1800,6 +1826,8 @@ def reparaciones(tab_reparaciones):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+
+    Mostrar_Datos_Tabla_Reparacion()
 
 #Contenido de pestaña piezas
 def piezas(tab_piezas):
