@@ -1979,6 +1979,28 @@ def piezas(tab_piezas):
         btnCancelarP.configure(state="disabled")
         btnRemoverP.configure(state="disabled")
 
+    def Mostrar_Datos_Tabla_Piezas():
+        usuario = Conexion()
+        registros = usuario.Reporte_Piezas()
+
+        #Creacion de treeView
+        tree = ttk.Treeview(tab_piezas)
+        tree["columns"] = ("#1", "#2")
+        tree.heading("#0", text="ID_PIEZA")
+        tree.heading("#1", text="DESCRIPCION_PIEZA")
+        tree.heading("#2", text="STOCK")
+
+        for fila in registros:
+            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2]))
+
+        yscroll = ttk.Scrollbar(tab_piezas, orient='vertical', command=tree.yview)
+        xscroll = ttk.Scrollbar(tab_piezas, orient='horizontal', command=tree.xview)
+    
+        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
+        tree.place(x=475, y=100, width=500, height=175)
+        yscroll.place(x=475, y=90, height=175)
+        xscroll.place(x=475, y=90, width=500)
+    
     def Reporte_Piezas():
         usuario = Conexion()
         registros = usuario.Reporte_Piezas()
@@ -2012,6 +2034,7 @@ def piezas(tab_piezas):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
+    Mostrar_Datos_Tabla_Piezas()
 
 root.mainloop()
 
