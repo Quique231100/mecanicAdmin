@@ -8,6 +8,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, landscape 
+import os
 
 #Variables globales
 perfil = ""
@@ -438,6 +439,7 @@ def clientes(tab_clientes):
 
     lblImagen = ctk.CTkLabel(tab_clientes,text="", image="")
     lblImagen.place(x=210, y=270)
+    
 
     btnCargarImagen = ctk.CTkButton(tab_clientes, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_cliente(lblImagen))
     btnCargarImagen.place(x=360, y=270)
@@ -556,7 +558,7 @@ def clientes(tab_clientes):
                 txtApPaternoC.insert(0,busqueda[2])
                 txtApMaternoC.insert(0,busqueda[3])
                 imagen_perfil_default = Image.open(busqueda[5])  # Ruta correcta de tu imagen predeterminada
-                imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+                imagen_perfil_default = imagen_perfil_default.resize((800, 800), Image.BICUBIC)
                 imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
                 lblImagen.configure(image=imagen_perfil_default)
                 btnEditar.configure(state="active")
@@ -580,6 +582,7 @@ def clientes(tab_clientes):
 
     
     def cargar_imagen_cliente(label):
+        global ruta_imagen_global
         ruta_imagen = filedialog.askopenfilename(title="Seleccionar imagen", filetypes=[("Archivos de imagen", "*.png;*.jpg;*.jpeg;*.gif")])
         if ruta_imagen:
             imagen = Image.open(ruta_imagen)
@@ -587,26 +590,33 @@ def clientes(tab_clientes):
             imagen_perfil = ctk.CTkImage(imagen)
             label.configure(image=imagen_perfil)
             label.image = imagen_perfil
+            nombre_archivo, extension = os.path.splitext(os.path.basename(ruta_imagen))
+            ruta_imagen_global = os.path.join("Clientes/" + nombre_archivo + extension)  # Almacena la parte deseada en la variable global
+            print(ruta_imagen_global)
         else:
             messagebox.showwarning("Advertencia", "No se ha seleccionado ninguna imagen.")
+
+
+
+
 
     def GuardarCliente():
         usuario = Conexion()
         if tipo_guardado == "nuevo":
             idUsuario = perfil
-            #id = txtIdCliente.get()
             nombre = txtNombreC.get()
             apellidoPaterno = txtApPaternoC.get()
             apellidoMaterno = txtApMaternoC.get()
+            rutaImagen = ruta_imagen_global # Asegúrate de tener la variable 'ruta_imagen' definida en tu código
             if len(nombre) == 0 or len(apellidoPaterno) == 0 or len(apellidoMaterno) == 0:
                 messagebox.showerror(title="Error al insertar", message="Es necesario que todos los campos estén completos para insertar los datos.")
             else:
-                usuario.Insertar_Cliente(nombre, apellidoPaterno, apellidoMaterno, idUsuario)
+                usuario.Insertar_Cliente(nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen)
                 limpiar()
                 estado(False)
                 btnSalvar.configure(state="disabled")
                 btnCancelar.configure(state="disabled")
-                messagebox.showinfo(title="Estado",message="Registro exitoso")
+                messagebox.showinfo(title="Estado", message="Registro exitoso")
         elif tipo_guardado == "editar":
             usuario = Conexion()
             id = txtIdCliente.get()
@@ -614,6 +624,7 @@ def clientes(tab_clientes):
             nombre = txtNombreC.get()
             apellidoPaterno = txtApPaternoC.get()
             apellidoMaterno = txtApMaternoC.get()
+            rutaImagen = ruta_imagen_global  # Asegúrate de tener la variable 'ruta_imagen' definida en tu código
             if len(id) == 0 or len(nombre) == 0 or len(apellidoPaterno) == 0 or len(apellidoMaterno) == 0:
                 messagebox.showerror(title="Error al insertar", message="Es necesario que todos los campos estén completos para insertar los datos.")
             else:
@@ -621,7 +632,7 @@ def clientes(tab_clientes):
                 usuario_existente = usuario.Buscar_Cliente(id)
                 if usuario_existente:
                     # Realizar la actualización
-                    usuario.Modificar_Cliente(nombre, apellidoPaterno, apellidoMaterno,idUsuario, id)
+                    usuario.Modificar_Cliente(nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen, id)
                     limpiar()
                     estado(False)
                     btnSalvar.configure(state="disabled")
@@ -641,13 +652,13 @@ def clientes(tab_clientes):
         btnRemover.configure(state="disabled")
 
     def ModificarCliente():
-        global tipo_guardado
+        global tipo_guardado, ruta_imagen_global
         estado(True)
         btnSalvar.configure(state="active")
         btnCancelar.configure(state="active")
         tipo_guardado = "editar"
         btnEditar.configure(state="disabled")
-        cargar_imagen(lblImagen)
+        cargar_imagen_cliente(lblImagen)
 
     def EliminarCliente():
         usuario = Conexion()

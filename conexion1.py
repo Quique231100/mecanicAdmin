@@ -84,23 +84,24 @@ class Conexion:
         cur.close()    
         return datos
     
-    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario ):
+    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario, RutaImagen ):
         cur = self.conexion.cursor()
-        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario) VALUES('{}','{}', '{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario)
+        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario, Imagen) VALUES('{}','{}', '{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, RutaImagen)
         cur.execute(query)
         n = cur.rowcount
         self.conexion.commit()
         cur.close()
         return n
     
-    def Modificar_Cliente(self,nombre, apellidoPaterno, apellidoMaterno, idUsuario, id, ):
+    def Modificar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen, id):
         cur = self.conexion.cursor()
-        sql='''UPDATE clientes SET NOMBRE_CLIENTE='{}', APELLIDOP_CLIENTE='{}', APELLIDOM_CLIENTE='{}', ID_Usuario='{}' WHERE ID_CLIENTE={}'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, id)
+        sql = '''UPDATE clientes SET NOMBRE_CLIENTE='{}', APELLIDOP_CLIENTE='{}', APELLIDOM_CLIENTE='{}', ID_Usuario='{}', Imagen='{}' WHERE ID_CLIENTE={}'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen, id)
         cur.execute(sql)
-        dato=cur.rowcount
-        self.conexion.commit()    
+        dato = cur.rowcount
+        self.conexion.commit()
         cur.close()
         return dato
+
     
     def Eliminar_Cliente(self,id):
         cur = self.conexion.cursor()
