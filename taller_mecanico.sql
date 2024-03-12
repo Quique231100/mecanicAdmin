@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2023 a las 08:36:15
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 12-03-2024 a las 20:33:28
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `taller_mecanico_pruebas_2`
+-- Base de datos: `taller_mecanico`
 --
 
 -- --------------------------------------------------------
@@ -32,23 +32,19 @@ CREATE TABLE `clientes` (
   `NOMBRE_CLIENTE` varchar(255) NOT NULL,
   `APELLIDOP_CLIENTE` varchar(255) NOT NULL,
   `APELLIDOM_CLIENTE` varchar(255) NOT NULL,
-  `ID_Usuario` int(10) DEFAULT NULL
+  `ID_Usuario` int(10) DEFAULT NULL,
+  `Imagen` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`) VALUES
-(1, 'Ramiro', 'Lupercio', 'Coronel', 2),
-(2, 'Paco', 'Barrón', 'Gutierrez', 1),
-(3, 'Julian', 'Rivera', 'Sanchez', 3),
-(4, 'Eric', 'Cortes', 'Ocampo', 4),
-(5, 'Thelma', 'Rodiguez', 'Soto', 2),
-(6, 'Palatras', 'Barron', 'Castro', 2),
-(7, 'Luis', 'Sanchez', 'Ochoa', 3),
-(8, 'El ', 'Javis', 'Palatras', 1),
-(9, 'Salma', 'Orozco', 'Castillo', 7);
+INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`, `Imagen`) VALUES
+(1, 'Ramiro', 'Lupercio', 'Coronel', 2, 'Clientes/17004.png'),
+(10, 'Raudel', 'c', 'c', 2, 'Clientes/hola.png'),
+(11, '2', '1', '1', 2, 'Clientes/hola.png'),
+(12, '2', '2', '2', 2, 'Clientes/hola.png');
 
 -- --------------------------------------------------------
 
@@ -221,7 +217,7 @@ ALTER TABLE `vehiculos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `piezas`
