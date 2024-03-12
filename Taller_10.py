@@ -171,7 +171,7 @@ def usuarios(tab_usuarios):
     imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
     imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
 
-    lblImagen = ctk.CTkLabel(tab_usuarios,text="", image=imagen_perfil_default)
+    lblImagen = ctk.CTkLabel(tab_usuarios,text="", image="")
     lblImagen.place(x=360, y=130)
 
     btnCargarImagen = ctk.CTkButton(tab_usuarios, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_usuario(lblImagen))
@@ -436,11 +436,7 @@ def clientes(tab_clientes):
     txtApMaternoC = ctk.CTkEntry(tab_clientes, justify="center",width=150,height=10)
     txtApMaternoC.place(x=210,y=235)
 
-    imagen_perfil_default = Image.open("Clientes/17004.png")  # Ruta correcta de tu imagen predeterminada
-    imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
-    imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
-
-    lblImagen = ctk.CTkLabel(tab_clientes,text="", image=imagen_perfil_default)
+    lblImagen = ctk.CTkLabel(tab_clientes,text="", image="")
     lblImagen.place(x=210, y=270)
 
     btnCargarImagen = ctk.CTkButton(tab_clientes, text="Cargar Imagen", width=80, height=10, command=lambda: cargar_imagen_cliente(lblImagen))
@@ -559,6 +555,10 @@ def clientes(tab_clientes):
                 txtNombreC.insert(0,busqueda[1])
                 txtApPaternoC.insert(0,busqueda[2])
                 txtApMaternoC.insert(0,busqueda[3])
+                imagen_perfil_default = Image.open(busqueda[5])  # Ruta correcta de tu imagen predeterminada
+                imagen_perfil_default = imagen_perfil_default.resize((400, 400), Image.BICUBIC)
+                imagen_perfil_default = ctk.CTkImage(imagen_perfil_default)
+                lblImagen.configure(image=imagen_perfil_default)
                 btnEditar.configure(state="active")
                 btnRemover.configure(state="active")
             else:
@@ -1638,6 +1638,7 @@ def reparaciones(tab_reparaciones):
     #Opciones
     global global_clientes
     usuarios = Conexion()
+    print(perfil)
     if perfil == 'Mecanico':
         datos = usuarios.Seleccion_Id_Clientes_Mecanico()
     else:
