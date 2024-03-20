@@ -63,6 +63,15 @@ class Conexion:
         cur.close()
         return dato
     
+    #AQUI VAN LAS CONSULTAS DE LOS USUARIOS
+    
+    def Consulta_Cliente(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM clientes")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+    
     def Consulta_Usuario_ID(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT ID_Usuario FROM usuarios")
@@ -122,6 +131,13 @@ class Conexion:
         return dato
     #AQUI VAN LAS CONSULTAS DE LOS VEHICULOS
 
+    def Consulta_Vehiculo(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM vehiculos")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+    
     def Consulta_Cliente_ID(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT ID_CLIENTE FROM clientes")
