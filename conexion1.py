@@ -3,7 +3,7 @@ import mysql.connector
 class Conexion:
 
     def __init__(self):
-        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico")
+        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico_3")
 
     def __str__(self):
         datos=self.Consulta_Usuario()        
@@ -11,13 +11,6 @@ class Conexion:
         for row in datos:
             aux=aux + str(row) + "\n"
         return aux
-    
-    def Reporte_Usuario(self):
-        cur = self.conexion.cursor()
-        cur.execute("SELECT * FROM usuarios")
-        datos = cur.fetchall()
-        cur.close()    
-        return datos
 
     def Consulta_Usuario(self):
         cur = self.conexion.cursor()
@@ -70,6 +63,15 @@ class Conexion:
         cur.close()
         return dato
     
+    #AQUI VAN LAS CONSULTAS DE LOS USUARIOS
+    
+    def Consulta_Cliente(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM clientes")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+    
     def Consulta_Usuario_ID(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT ID_Usuario FROM usuarios")
@@ -77,31 +79,23 @@ class Conexion:
         cur.close()    
         return datos
     
-    def Reporte_Clientes(self):
+    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario):
         cur = self.conexion.cursor()
-        cur.execute("SELECT * FROM clientes")
-        datos = cur.fetchall()
-        cur.close()    
-        return datos
-    
-    def Insertar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario, RutaImagen ):
-        cur = self.conexion.cursor()
-        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario, Imagen) VALUES('{}','{}', '{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, RutaImagen)
+        query = '''INSERT INTO clientes (NOMBRE_CLIENTE, APELLIDOP_CLIENTE, APELLIDOM_CLIENTE, ID_Usuario) VALUES('{}','{}', '{}', '{}')'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario)
         cur.execute(query)
         n = cur.rowcount
         self.conexion.commit()
         cur.close()
         return n
     
-    def Modificar_Cliente(self, nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen, id):
+    def Modificar_Cliente(self,nombre, apellidoPaterno, apellidoMaterno, idUsuario, id):
         cur = self.conexion.cursor()
-        sql = '''UPDATE clientes SET NOMBRE_CLIENTE='{}', APELLIDOP_CLIENTE='{}', APELLIDOM_CLIENTE='{}', ID_Usuario='{}', Imagen='{}' WHERE ID_CLIENTE={}'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, rutaImagen, id)
+        sql='''UPDATE clientes SET NOMBRE_CLIENTE='{}', APELLIDOP_CLIENTE='{}', APELLIDOM_CLIENTE='{}', ID_Usuario='{}' WHERE ID_CLIENTE={}'''.format(nombre, apellidoPaterno, apellidoMaterno, idUsuario, id)
         cur.execute(sql)
-        dato = cur.rowcount
-        self.conexion.commit()
+        dato=cur.rowcount
+        self.conexion.commit()    
         cur.close()
         return dato
-
     
     def Eliminar_Cliente(self,id):
         cur = self.conexion.cursor()
@@ -137,6 +131,13 @@ class Conexion:
         return dato
     #AQUI VAN LAS CONSULTAS DE LOS VEHICULOS
 
+    def Consulta_Vehiculo(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT * FROM vehiculos")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+    
     def Consulta_Cliente_ID(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT ID_CLIENTE FROM clientes")
@@ -169,14 +170,7 @@ class Conexion:
         dato=cur.rowcount
         self.conexion.commit()    
         cur.close()
-        return dato 
-     
-    def Reporte_Vehiculos(self):
-        cur = self.conexion.cursor()
-        cur.execute("SELECT * FROM vehiculos")
-        datos = cur.fetchall()
-        cur.close()    
-        return datos
+        return dato  
     
     def Buscar_Vehiculo(self, id):
         cur = self.conexion.cursor()
@@ -335,3 +329,32 @@ class Conexion:
         self.conexion.commit()    
         cur.close()
         return dato
+    
+    def Modificar_Imagen_Cliente(self, datos_imagen, id_cliente):
+        cur = self.conexion.cursor()
+        sql = '''UPDATE clientes SET imagen=%s WHERE ID_CLIENTE=%s'''
+        cur.execute(sql, (datos_imagen, id_cliente))
+        self.conexion.commit()
+        cur.close()
+    
+    def Modificar_Imagen_Vehiculo(self, datos_imagen, id_vehiculo):
+        cur = self.conexion.cursor()
+        sql = '''UPDATE vehiculos SET imagen=%s WHERE ID_VEHICULO=%s'''
+        cur.execute(sql, (datos_imagen, id_vehiculo))
+        self.conexion.commit()
+        cur.close()
+    
+    def Modificar_Imagen_Reparacion(self, datos_imagen, id_reparacion):
+        cur = self.conexion.cursor()
+        sql = '''UPDATE reparaciones SET imagen=%s WHERE ID_REPARACION=%s'''
+        cur.execute(sql, (datos_imagen, id_reparacion))
+        self.conexion.commit()
+        cur.close()
+
+    def Modificar_Imagen_Pieza(self, datos_imagen, id_pieza):
+        cur = self.conexion.cursor()
+        sql = '''UPDATE piezas SET imagen=%s WHERE ID_Pieza=%s'''
+        cur.execute(sql, (datos_imagen, id_pieza))
+        self.conexion.commit()
+        cur.close()
+    
