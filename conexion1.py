@@ -169,7 +169,8 @@ class Conexion:
         dato=cur.rowcount
         self.conexion.commit()    
         cur.close()
-        return dato  
+        return dato 
+     
     def Reporte_Vehiculos(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT * FROM vehiculos")
