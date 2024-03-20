@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import END, messagebox, ttk
+from tkinter import END, messagebox
 from conexion1 import *
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -184,8 +184,6 @@ def usuarios(tab_usuarios):
     btnEditar.place(x=361, y=400)
     btnRemover = ctk.CTkButton(tab_usuarios, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarUsuario())
     btnRemover.place(x=476, y=400)
-    btnReporteU = ctk.CTkButton(tab_usuarios, text="Reporte",width=100, height=30, command=lambda:Reporte_Usuario())
-    btnReporteU.place(x=591, y=400)
 
     #menu
     opcion=["None","Admin", "Gerente", "Secretaria","Mecanico"]
@@ -356,40 +354,6 @@ def usuarios(tab_usuarios):
         btnCancelar.configure(state="disabled")
         btnRemover.configure(state="disabled")
 
-    def Reporte_Usuario():
-        usuario = Conexion()
-        registros = usuario.Consulta_Usuario()
-        # Crea un archivo PDF
-        pdf_filename = 'reporte_Usuarios.pdf'
-        c = canvas.Canvas(pdf_filename,pagesize=letter)
-        width, height = letter
-        # Define el encabezado de la tabla
-        encabezado = ["Id_Usuario", "Nombre_Usuario", "Apellido_P_Paterno", "Apellido_M_Paterno","Telefono_Usuario", "UserName_Usuario", "Perfil_Usuario", "Direccion_Usuario", "Password_Usuario"]  # Reemplaza con los nombres de tus columnas
-        # Calcula el ancho de las columnas
-        col_width = width / len(encabezado)
-
-        # Establece un tamaño de fuente más pequeño para el encabezado
-        c.setFont("Helvetica", 7)  # Cambia el 8 al tamaño de fuente deseado para el encabezado
-
-        # Escribe el encabezado centrado
-        for i, columna in enumerate(encabezado):
-            x = i * col_width + col_width / 2  # Calcula el centro de la celda
-            y = height - 15
-            c.drawCentredString(x, y, columna)
-
-        # Escribe los registros centrados
-        for fila_num, fila in enumerate(registros):
-            fila_num += 1
-            for col_num, valor in enumerate(fila):
-                x = col_num * col_width + col_width / 2
-                y = height - (20 + fila_num * 20)
-                c.drawCentredString(x, y, str(valor))
-
-        # Guarda el archivo PDF
-        c.save()
-
-        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
 #Contenido de pestaña clientes
 def clientes(tab_clientes):
     root.geometry(f"{1200}x{500}")
@@ -406,6 +370,8 @@ def clientes(tab_clientes):
     
     # Función para mostrar la imagen del cliente
     def mostrar_imagen(imagen_cliente):
+        
+        img_label.place(x=385, y=115)
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -493,8 +459,6 @@ def clientes(tab_clientes):
     btnEditar.place(x=361, y=400)
     btnRemover = ctk.CTkButton(tab_clientes, text="Remover",width=100, height=30,state="disabled",command=lambda:EliminarCliente())
     btnRemover.place(x=476, y=400)
-    btnReporteC = ctk.CTkButton(tab_clientes, text="Reporte",width=100, height=30, command=lambda:Reporte_Cliente())
-    btnReporteC.place(x=591, y=400)
 
     global global_clientes
     usuarios = Conexion()
@@ -574,7 +538,9 @@ def clientes(tab_clientes):
 
     # Función para mostrar "sin imagen"
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
 
     def NuevoCliente():
         global tipo_guardado
@@ -659,40 +625,6 @@ def clientes(tab_clientes):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
-    def Reporte_Cliente():
-        usuario = Conexion()
-        registros = usuario.Consulta_Cliente()
-        # Crea un archivo PDF
-        pdf_filename = 'reporte_Clientes.pdf'
-        c = canvas.Canvas(pdf_filename,pagesize=letter)
-        width, height = letter
-        # Define el encabezado de la tabla
-        encabezado = ["ID_CLIENTE", "NOMBRE_CLIENTE", "APELLIDOP_CLIENTE", "APELLIDOM_CLIENTE", "ID_Usuario"]  # Reemplaza con los nombres de tus columnas
-        # Calcula el ancho de las columnas
-        col_width = width / len(encabezado)
-
-        # Establece un tamaño de fuente más pequeño para el encabezado
-        c.setFont("Helvetica", 7)  # Cambia el 8 al tamaño de fuente deseado para el encabezado
-
-        # Escribe el encabezado centrado
-        for i, columna in enumerate(encabezado):
-            x = i * col_width + col_width / 2  # Calcula el centro de la celda
-            y = height - 15
-            c.drawCentredString(x, y, columna)
-
-        # Escribe los registros centrados
-        for fila_num, fila in enumerate(registros):
-            fila_num += 1
-            for col_num, valor in enumerate(fila):
-                x = col_num * col_width + col_width / 2
-                y = height - (20 + fila_num * 20)
-                c.drawCentredString(x, y, str(valor))
-
-        # Guarda el archivo PDF
-        c.save()
-
-        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
 #Contenido de pestaña vehiculo
 def vehiculo(tab_vehiculo):
     root.geometry(f"{1200}x{500}")
@@ -732,8 +664,6 @@ def vehiculo(tab_vehiculo):
     btnEditarV.place(x=361, y=400)
     btnRemoverV = ctk.CTkButton(tab_vehiculo, text="Remover",width=100, height=30, state="disabled", command=lambda:EliminarVehiculo())
     btnRemoverV.place(x=476, y=400)
-    btnReporteV = ctk.CTkButton(tab_vehiculo, text="Reporte",width=100, height=30, command=lambda:Reporte_Vehiculo())
-    btnReporteV.place(x=591, y=400)
     
     img_label = ctk.CTkLabel(tab_vehiculo, text="Imagen", font=ctk.CTkFont(size=15, weight="bold"))
     img_label.place(x=385, y=115)
@@ -741,6 +671,8 @@ def vehiculo(tab_vehiculo):
     
     # Función para mostrar la imagen del cliente
     def mostrar_imagen(imagen_cliente):
+        
+        img_label.place(x=385, y=115)
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -805,7 +737,9 @@ def vehiculo(tab_vehiculo):
     btnSubirImagen.place(x=370, y=275)
     
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
 
     #Opciones
     global global_clientes
@@ -1014,40 +948,6 @@ def vehiculo(tab_vehiculo):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
-    def Reporte_Vehiculo():
-        usuario = Conexion()
-        registros = usuario.Consulta_Vehiculo()
-        # Crea un archivo PDF
-        pdf_filename = 'reporte_Vehiculos.pdf'
-        c = canvas.Canvas(pdf_filename,pagesize=letter)
-        width, height = letter
-        # Define el encabezado de la tabla
-        encabezado = ["ID_VEHICULO", "MATRICULA", "MARCA", "MODELO", "FECHA", "ID_CLIENTE"]  # Reemplaza con los nombres de tus columnas
-        # Calcula el ancho de las columnas
-        col_width = width / len(encabezado)
-
-        # Establece un tamaño de fuente más pequeño para el encabezado
-        c.setFont("Helvetica", 7)  # Cambia el 8 al tamaño de fuente deseado para el encabezado
-
-        # Escribe el encabezado centrado
-        for i, columna in enumerate(encabezado):
-            x = i * col_width + col_width / 2  # Calcula el centro de la celda
-            y = height - 15
-            c.drawCentredString(x, y, columna)
-
-        # Escribe los registros centrados
-        for fila_num, fila in enumerate(registros):
-            fila_num += 1
-            for col_num, valor in enumerate(fila):
-                x = col_num * col_width + col_width / 2
-                y = height - (20 + fila_num * 20)
-                c.drawCentredString(x, y, str(valor))
-
-        # Guarda el archivo PDF
-        c.save()
-
-        print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
 #Contenido de pestaña reparaciones
 def Reparacion_Mecanico(tab_reparacionesM):
     root.geometry(f"{1200}x{500}")
@@ -1097,6 +997,8 @@ def Reparacion_Mecanico(tab_reparacionesM):
 
     # Función para mostrar la imagen del vehiculo
     def mostrar_imagen(imagen_cliente):
+        
+        img_label.place(x=361, y=150)
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -1161,7 +1063,9 @@ def Reparacion_Mecanico(tab_reparacionesM):
     btnSubirImagen.place(x=361, y=300)
     
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
     
     #Opciones
     global global_clientes
@@ -1379,32 +1283,6 @@ def Reparacion_Mecanico(tab_reparacionesM):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
-    def Mostrar_Datos_Tabla_Reparacion():
-        usuario = Conexion()
-        registros = usuario.Reporte_Reparacion()
-
-        #Creacion de treeView
-        tree = ttk.Treeview(tab_reparacionesM)
-        tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
-        tree.heading("#0", text="ID_REPARACION")
-        tree.heading("#1", text="ID_PIEZA")
-        tree.heading("#2", text="FECHA_ENTRADA")
-        tree.heading("#3", text="FECHA_SALIDA")
-        tree.heading("#4", text="FALLA")
-        tree.heading("#5", text="CANT_PIEZAS")
-        tree.heading("#6", text="ID_VEHICULO")
-
-        for fila in registros:
-            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]))
-
-        yscroll = ttk.Scrollbar(tab_reparacionesM, orient='vertical', command=tree.yview)
-        xscroll = ttk.Scrollbar(tab_reparacionesM, orient='horizontal', command=tree.xview)
-    
-        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
-        tree.place(x=650, y=100, width=500, height=175)
-        yscroll.place(x=630, y=90, height=175)
-        xscroll.place(x=630, y=90, width=500)
-
     def Reporte_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -1438,8 +1316,6 @@ def Reparacion_Mecanico(tab_reparacionesM):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-    
-    Mostrar_Datos_Tabla_Reparacion()
 
 def Reparacion_Gerente(tab_reparacionesG):
     root.geometry(f"{1200}x{500}")
@@ -1489,6 +1365,8 @@ def Reparacion_Gerente(tab_reparacionesG):
 
     # Función para mostrar la imagen del vehiculo
     def mostrar_imagen(imagen_cliente):
+        
+        img_label.place(x=361, y=150)
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -1553,7 +1431,9 @@ def Reparacion_Gerente(tab_reparacionesG):
     btnSubirImagen.place(x=361, y=300)
     
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
     
     #Opciones
     global global_clientes
@@ -1763,32 +1643,6 @@ def Reparacion_Gerente(tab_reparacionesG):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
-    def Mostrar_Datos_Tabla_Reparacion():
-        usuario = Conexion()
-        registros = usuario.Reporte_Reparacion()
-
-        #Creacion de treeView
-        tree = ttk.Treeview(tab_reparacionesG)
-        tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
-        tree.heading("#0", text="ID_REPARACION")
-        tree.heading("#1", text="ID_PIEZA")
-        tree.heading("#2", text="FECHA_ENTRADA")
-        tree.heading("#3", text="FECHA_SALIDA")
-        tree.heading("#4", text="FALLA")
-        tree.heading("#5", text="CANT_PIEZAS")
-        tree.heading("#6", text="ID_VEHICULO")
-
-        for fila in registros:
-            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]))
-
-        yscroll = ttk.Scrollbar(tab_reparacionesG, orient='vertical', command=tree.yview)
-        xscroll = ttk.Scrollbar(tab_reparacionesG, orient='horizontal', command=tree.xview)
-    
-        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
-        tree.place(x=650, y=100, width=500, height=175)
-        yscroll.place(x=630, y=90, height=175)
-        xscroll.place(x=630, y=90, width=500)
-
     def Reporte_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -1822,8 +1676,6 @@ def Reparacion_Gerente(tab_reparacionesG):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
-    Mostrar_Datos_Tabla_Reparacion()
 
 def reparaciones(tab_reparaciones):
     root.geometry(f"{1200}x{500}")
@@ -1878,6 +1730,9 @@ def reparaciones(tab_reparaciones):
     
     # Función para mostrar la imagen del vehiculo
     def mostrar_imagen(imagen_cliente):
+        
+        img_label.place(x=361, y=150)
+        
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -1909,6 +1764,7 @@ def reparaciones(tab_reparaciones):
     
     # Función para subir una imagen
     def subir_imagen():
+        
       id_reparacion = mIdReparacion.get()  # Obtener el ID del cliente seleccionado
       if id_reparacion != "None":
           # Abrir un cuadro de diálogo para seleccionar una imagen
@@ -1942,7 +1798,9 @@ def reparaciones(tab_reparaciones):
     btnSubirImagen.place(x=361, y=300)
     
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
 
     
     #Opciones
@@ -2176,32 +2034,6 @@ def reparaciones(tab_reparaciones):
             messagebox.showinfo(title="Estado",message="Usuario eliminado con éxito")
         estado(False)
 
-    def Mostrar_Datos_Tabla_Reparacion():
-        usuario = Conexion()
-        registros = usuario.Reporte_Reparacion()
-
-        #Creacion de treeView
-        tree = ttk.Treeview(tab_reparaciones)
-        tree["columns"] = ("#1", "#2", "#3", "#4", "#5", "#6")
-        tree.heading("#0", text="ID_REPARACION")
-        tree.heading("#1", text="ID_PIEZA")
-        tree.heading("#2", text="FECHA_ENTRADA")
-        tree.heading("#3", text="FECHA_SALIDA")
-        tree.heading("#4", text="FALLA")
-        tree.heading("#5", text="CANT_PIEZAS")
-        tree.heading("#6", text="ID_VEHICULO")
-
-        for fila in registros:
-            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2], fila[3], fila[4], fila[5], fila[6]))
-
-        yscroll = ttk.Scrollbar(tab_reparaciones, orient='vertical', command=tree.yview)
-        xscroll = ttk.Scrollbar(tab_reparaciones, orient='horizontal', command=tree.xview)
-    
-        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
-        tree.place(x=650, y=100, width=500, height=175)
-        yscroll.place(x=630, y=90, height=175)
-        xscroll.place(x=630, y=90, width=500)
-    
     def Reporte_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -2236,8 +2068,6 @@ def reparaciones(tab_reparaciones):
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 
-    Mostrar_Datos_Tabla_Reparacion()
-
 #Contenido de pestaña piezas
 def piezas(tab_piezas):
     root.geometry(f"{1200}x{500}")
@@ -2271,12 +2101,18 @@ def piezas(tab_piezas):
     btnRemoverP.place(x=476, y=400)
     btnReporteR = ctk.CTkButton(tab_piezas, text="Reporte",width=100, height=30, command=lambda:Reporte_Piezas())
     btnReporteR.place(x=591, y=400)
-
+    
     img_label = ctk.CTkLabel(tab_piezas, text="Imagen", font=ctk.CTkFont(size=15, weight="bold"))
     img_label.place(x=361, y=150)
 
+    
+
     # Función para mostrar la imagen del vehiculo
     def mostrar_imagen(imagen_cliente):
+        
+        
+        img_label.place(x=365, y=80)
+    
         try:
             # Leer la imagen desde los datos binarios
             imagen = Image.open(io.BytesIO(imagen_cliente))
@@ -2340,8 +2176,13 @@ def piezas(tab_piezas):
     btnSubirImagen = ctk.CTkButton(tab_piezas, text="Subir imagen", width=100, height=30, command=subir_imagen)
     btnSubirImagen.place(x=361, y=300)
     
+    
+    
     def mostrar_sin_imagen():
+        
         img_label.configure(text="Sin imagen")
+        img_label.place_forget()
+        
 
     def estado(est):
         if est == True:
@@ -2465,28 +2306,6 @@ def piezas(tab_piezas):
         btnCancelarP.configure(state="disabled")
         btnRemoverP.configure(state="disabled")
 
-    def Mostrar_Datos_Tabla_Piezas():
-        usuario = Conexion()
-        registros = usuario.Reporte_Piezas()
-
-        #Creacion de treeView
-        tree = ttk.Treeview(tab_piezas)
-        tree["columns"] = ("#1", "#2")
-        tree.heading("#0", text="ID_PIEZA")
-        tree.heading("#1", text="DESCRIPCION_PIEZA")
-        tree.heading("#2", text="STOCK")
-
-        for fila in registros:
-            tree.insert("", tk.END, text=fila[0], values=(fila[1], fila[2]))
-
-        yscroll = ttk.Scrollbar(tab_piezas, orient='vertical', command=tree.yview)
-        xscroll = ttk.Scrollbar(tab_piezas, orient='horizontal', command=tree.xview)
-    
-        tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
-        tree.place(x=650, y=100, width=500, height=175)
-        yscroll.place(x=630, y=90, height=175)
-        xscroll.place(x=630, y=90, width=500)
-
     def Reporte_Piezas():
         usuario = Conexion()
         registros = usuario.Reporte_Piezas()
@@ -2520,8 +2339,6 @@ def piezas(tab_piezas):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
-    Mostrar_Datos_Tabla_Piezas()
 
 root.mainloop()
 
