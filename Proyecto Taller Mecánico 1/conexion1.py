@@ -3,7 +3,7 @@ import mysql.connector
 class Conexion:
 
     def __init__(self):
-        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico")
+        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico_3")
 
     def __str__(self):
         datos=self.Consulta_Usuario()        
