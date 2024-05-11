@@ -3,7 +3,7 @@ import mysql.connector
 class Conexion:
 
     def __init__(self):
-        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico_3")
+        self.conexion = mysql.connector.connect(host="localhost", user="root", passwd="", database="taller_mecanico")
 
     def __str__(self):
         datos=self.Consulta_Usuario()        
@@ -63,6 +63,16 @@ class Conexion:
         cur.close()
         return dato
     
+    def Consulta_Cliente(self):
+        cur = self.conexion.cursor()
+        cur.execute("SELECT fecha_registro, ID_cliente, MONTH(fecha_registro) AS mes FROM clientes")
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+
+
+
+
     def Consulta_Usuario_ID(self):
         cur = self.conexion.cursor()
         cur.execute("SELECT ID_Usuario FROM usuarios")

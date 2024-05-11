@@ -8,7 +8,11 @@ from reportlab.lib.pagesizes import letter, landscape
 from tkinter import filedialog
 from PIL import ImageTk, Image
 import io
-
+import schedule
+import time
+import threading
+import pandas as pd
+import matplotlib.pyplot as plt
 
 #Variables globales
 perfil = ""
@@ -134,6 +138,9 @@ def login():
 
 #Llama a la funcion login al iniciar el programa
 login()
+
+
+
 
 #Contenido de pestaña usuarios
 def usuarios(tab_usuarios):
@@ -401,6 +408,9 @@ def clientes(tab_clientes):
     ctk.CTkLabel(tab_clientes, text="Apellido paterno: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=62, y=190)
     ctk.CTkLabel(tab_clientes, text="Apellido materno: ",font=ctk.CTkFont(size=15, weight="bold")).place(x=59, y=230)
     img_label = ctk.CTkLabel(tab_clientes, text="Imagen", font=ctk.CTkFont(size=15, weight="bold"))
+
+    ctk.CTkButton(tab_clientes, text="Estadisticas",width=100, height=30, command=lambda:estadistica()).place(x=706, y=400)
+
     img_label.place(x=385, y=115)
     
     
@@ -434,9 +444,32 @@ def clientes(tab_clientes):
             messagebox.showerror("Error", "Ocurrió un error al mostrar la imagen: " + str(e))
 
 
+    def estadistica():
+        import datetime  # Import the datetime module
 
-    
-    
+        usuario = Conexion()
+        data = usuario.Consulta_Cliente()
+        # Convertir datetime.date a datetime.datetime
+        data = [(datetime.datetime.combine(date, datetime.datetime.min.time()), id_cliente, mes) for date, id_cliente, mes in data]
+        clientes = pd.DataFrame(data)
+
+        # Crear una nueva columna para el mes de registro
+        clientes['mes_registro'] = clientes[0].dt.month
+
+        # Contar el número de registros por mes
+        registros_por_mes = clientes.groupby('mes_registro').size()
+
+        # Crear un gráfico de barras para visualizar los registros por mes
+        plt.figure(figsize=(10, 6))
+        registros_por_mes.plot(kind='bar', color='skyblue')
+        plt.title('Número de Registros de Clientes por Mes')
+        plt.xlabel('Mes')
+        plt.ylabel('Número de Registros')
+        plt.xticks(rotation=0)
+        plt.grid(axis='y', linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        plt.show()
+        
     # Función para subir una imagen
     def subir_imagen():
       id_cliente = mIdCliente.get()  # Obtener el ID del cliente seleccionado
@@ -1103,6 +1136,8 @@ def Reparacion_Mecanico(tab_reparacionesM):
     img_label = ctk.CTkLabel(tab_reparacionesM, text="Imagen", font=ctk.CTkFont(size=15, weight="bold"))
     img_label.place(x=361, y=150)
 
+    
+
     # Función para mostrar la imagen del vehiculo
     def mostrar_imagen(imagen_cliente):
         
@@ -1370,6 +1405,8 @@ def Reparacion_Mecanico(tab_reparacionesM):
         btnSalvarR.configure(state="disabled")
         btnCancelarR.configure(state="disabled")
 
+
+
     def Mostrar_Datos_Tabla_Reparacion():
         usuario = Conexion()
         registros = usuario.Reporte_Reparacion()
@@ -1431,6 +1468,10 @@ def Reparacion_Mecanico(tab_reparacionesM):
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
     
     Mostrar_Datos_Tabla_Reparacion()
+
+      
+
+
 
     def ActualizarReparacion():
         global tipo_guardado
@@ -2529,7 +2570,7 @@ def piezas(tab_piezas):
         usuario = Conexion()
         registros = usuario.Reporte_Piezas()
         # Crea un archivo PDF
-        pdf_filename = 'tabla_Piezas.pdf'
+        pdf_filename = 'Inventario.pdf'
         c = canvas.Canvas(pdf_filename,pagesize=letter)
         width, height = letter
         # Define el encabezado de la tabla
@@ -2558,8 +2599,54 @@ def piezas(tab_piezas):
         c.save()
 
         print(f'Los datos de la tabla se han guardado en {pdf_filename}')
-
+    
     Mostrar_Datos_Tabla_Piezas()
 
+def programar_reporte():
+    # Programa la generación del informe a las 11:15 AM cada día
+    print("Programando la generación del informe diario a las 11:32 AM")
+    schedule.every().day.at("11:32").do(Reporte_Piezas2)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+# Crea un hilo para ejecutar la función programar_reporte()
+reporte_thread = threading.Thread(target=programar_reporte)
+reporte_thread.start()  # Inicia el hilo
+
+# Define la función para generar el informe de piezas
+def Reporte_Piezas2():
+    usuario = Conexion()
+    registros = usuario.Reporte_Piezas()
+    # Crea un archivo PDF
+    pdf_filename = 'Inventario.pdf'
+    c = canvas.Canvas(pdf_filename, pagesize=letter)
+    width, height = letter
+    # Define el encabezado de la tabla
+    encabezado = ["ID_PIEZAS", "DESCRIPCION", "STOCK"]
+    # Calcula el ancho de las columnas
+    col_width = width / len(encabezado)
+
+    # Establece un tamaño de fuente más pequeño para el encabezado
+    c.setFont("Helvetica", 7)  # Cambia el 8 al tamaño de fuente deseado para el encabezado
+
+    # Escribe el encabezado centrado
+    for i, columna in enumerate(encabezado):
+        x = i * col_width + col_width / 2  # Calcula el centro de la celda
+        y = height - 15
+        c.drawCentredString(x, y, columna)
+
+    # Escribe los registros centrados
+    for fila_num, fila in enumerate(registros):
+        fila_num += 1
+        for col_num, valor in enumerate(fila):
+            x = col_num * col_width + col_width / 2
+            y = height - (20 + fila_num * 20)
+            c.drawCentredString(x, y, str(valor))
+
+    # Guarda el archivo PDF
+    c.save()
+
+    print(f'Los datos de la tabla se han guardado en {pdf_filename}')
 root.mainloop()
 

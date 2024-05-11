@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-03-2024 a las 20:33:28
+-- Tiempo de generación: 11-05-2024 a las 20:11:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,18 +33,25 @@ CREATE TABLE `clientes` (
   `APELLIDOP_CLIENTE` varchar(255) NOT NULL,
   `APELLIDOM_CLIENTE` varchar(255) NOT NULL,
   `ID_Usuario` int(10) DEFAULT NULL,
-  `Imagen` varchar(100) NOT NULL
+  `fecha_registro` date NOT NULL DEFAULT current_timestamp(),
+  `Imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `clientes`
 --
 
-INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`, `Imagen`) VALUES
-(1, 'Ramiro', 'Lupercio', 'Coronel', 2, 'Clientes/17004.png'),
-(10, 'Raudel', 'c', 'c', 2, 'Clientes/hola.png'),
-(11, '2', '1', '1', 2, 'Clientes/hola.png'),
-(12, '2', '2', '2', 2, 'Clientes/hola.png');
+INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`, `fecha_registro`, `Imagen`) VALUES
+(1, 'Ramiro', 'Lupercio', 'Coronel', 2, '2024-04-09', NULL),
+(2, 'Paco', 'Barrón', 'Gutierrez', 1, '2024-03-19', NULL),
+(3, 'Julian', 'Rivera', 'Sanchez', 3, '2024-03-10', NULL),
+(4, 'Eric', 'Cortes', 'Ocampo', 4, '2024-01-16', NULL),
+(5, 'Thelma', 'Rodiguez', 'Soto', 2, '2024-05-02', NULL),
+(6, 'Palatras', 'Barron', 'Castro', 2, '2024-05-05', NULL),
+(7, 'Luis', 'Sanchez', 'Ochoa', 3, '2024-05-05', NULL),
+(8, 'El ', 'Javis', 'Palatras', 1, '2024-05-05', NULL),
+(9, 'Salma', 'Orozco', 'Castillo', 7, '2024-02-13', NULL),
+(10, 'Juan', 'L', 'L', 1, '2024-03-11', NULL);
 
 -- --------------------------------------------------------
 
@@ -55,25 +62,26 @@ INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `AP
 CREATE TABLE `piezas` (
   `ID_Pieza` int(10) NOT NULL,
   `Descripcion_Pieza` longtext NOT NULL,
-  `Stock` int(11) NOT NULL
+  `Stock` int(11) NOT NULL,
+  `Imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `piezas`
 --
 
-INSERT INTO `piezas` (`ID_Pieza`, `Descripcion_Pieza`, `Stock`) VALUES
-(1, 'Tornillo M6x201', 112),
-(2, 'Espejos', 5),
-(3, 'Aceite de motor 1L', 45),
-(4, 'Anticongelante', 18),
-(5, 'Tornillo M6x201', 112),
-(6, 'Tornillo M6x201', 112),
-(7, 'Tornillo M6x201', 112),
-(8, 'Tornillo M6x201', 112),
-(9, 'Tornillo M6x201', 112),
-(10, 'Tornillo M6x201', 112),
-(11, 'Tornillo M6x201', 112);
+INSERT INTO `piezas` (`ID_Pieza`, `Descripcion_Pieza`, `Stock`, `Imagen`) VALUES
+(1, 'Tornillo M6x201', 112, NULL),
+(2, 'Espejos', 5, NULL),
+(3, 'Aceite de motor 1L', 45, NULL),
+(4, 'Anticongelante', 18, NULL),
+(5, 'Tornillo M6x201', 112, NULL),
+(6, 'Tornillo M6x201', 112, NULL),
+(7, 'Tornillo M6x201', 112, NULL),
+(8, 'Tornillo M6x201', 112, NULL),
+(9, 'Tornillo M6x201', 112, NULL),
+(10, 'Tornillo M6x201', 112, NULL),
+(11, 'Tornillo M6x201', 112, NULL);
 
 -- --------------------------------------------------------
 
@@ -88,20 +96,21 @@ CREATE TABLE `reparaciones` (
   `FECHA_SALIDA` varchar(255) NOT NULL,
   `FALLA` text NOT NULL,
   `CANT_PIEZAS` int(100) NOT NULL,
-  `ID_VEHICULO` int(10) NOT NULL
+  `ID_VEHICULO` int(10) NOT NULL,
+  `Imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `reparaciones`
 --
 
-INSERT INTO `reparaciones` (`ID_REPARACION`, `ID_Pieza`, `FECHA_ENTRADA`, `FECHA_SALIDA`, `FALLA`, `CANT_PIEZAS`, `ID_VEHICULO`) VALUES
-(1, 1, '2023-01-10', '2023-01-15', 'Problema en el motor', 2, 6),
-(2, 2, '2023-02-05', '2023-02-10', 'Frenos desgastados', 4, 7),
-(3, 3, '2023-03-15', '2023-03-20', 'Problema de transmisión', 1, 8),
-(4, 4, '2023-04-20', '2023-04-25', 'Requiere cambio de aceite', 3, 9),
-(5, 6, '10/10/23', '15/10/23', 'Balatas desgastadas', 9, 2),
-(6, 4, '10-10-23', '17-10-23', 'Frenos desgastados', 2, 8);
+INSERT INTO `reparaciones` (`ID_REPARACION`, `ID_Pieza`, `FECHA_ENTRADA`, `FECHA_SALIDA`, `FALLA`, `CANT_PIEZAS`, `ID_VEHICULO`, `Imagen`) VALUES
+(1, 1, '2023-01-10', '2023-01-15', 'Problema en el motor', 2, 6, NULL),
+(2, 2, '2023-02-05', '2023-02-10', 'Frenos desgastados', 4, 7, NULL),
+(3, 3, '2023-03-15', '2023-03-20', 'Problema de transmisión', 1, 8, NULL),
+(4, 4, '2023-04-20', '2023-04-25', 'Requiere cambio de aceite', 3, 9, NULL),
+(5, 6, '10/10/23', '15/10/23', 'Balatas desgastadas', 9, 2, NULL),
+(6, 4, '10-10-23', '17-10-23', 'Frenos desgastados', 2, 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -147,29 +156,30 @@ CREATE TABLE `vehiculos` (
   `MARCA` varchar(255) NOT NULL,
   `MODELO` varchar(255) NOT NULL,
   `FECHA` varchar(255) NOT NULL,
-  `ID_CLIENTE` int(10) DEFAULT NULL
+  `ID_CLIENTE` int(10) DEFAULT NULL,
+  `Imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `vehiculos`
 --
 
-INSERT INTO `vehiculos` (`ID_VEHICULO`, `MATRICULA`, `MARCA`, `MODELO`, `FECHA`, `ID_CLIENTE`) VALUES
-(1, 'ABC123', 'Toyota', 'Camry', '01/15/2023', 1),
-(2, 'XYZ789', 'Ford', 'F-150', '11/20/2022', 1),
-(3, 'Honda', 'DEF456', 'Civic', '05/10/2022', 2),
-(4, 'GHI789', 'Chevrolet', 'Silverado', '02/10/2023', 2),
-(5, 'JKL012', 'Nissan', 'Altima', '10/08/2022', 3),
-(6, 'MNO345', 'Hyundai', 'Elantra', '03/25/2023', 3),
-(7, 'PQR678', 'Mazda', 'CX-5', '09/15/2022', 4),
-(8, 'STU901', 'Subaru', 'Outback', '04/12/2023', 4),
-(9, 'VWX234', 'Jeep', 'Wrangler', '11/30/2022', 5),
-(10, 'YZA567', 'Kia', 'Sorento', '01/22/2023', 5),
-(11, 'BCD890', 'Volkswagen', 'Jetta', '12/18/2022', 6),
-(12, 'EFG123', 'Audi', 'A4', '02/28/2023', 6),
-(13, 'HIJ456', 'BMW', 'X5', '10/05/2022', 7),
-(14, 'QRS345', 'Infiniti', 'Q50', '04/05/2023', 8),
-(17, '954WEF', 'Ford', 'Raptor', '12/14/2022', 9);
+INSERT INTO `vehiculos` (`ID_VEHICULO`, `MATRICULA`, `MARCA`, `MODELO`, `FECHA`, `ID_CLIENTE`, `Imagen`) VALUES
+(1, 'ABC123', 'Toyota', 'Camry', '01/15/2023', 1, NULL),
+(2, 'XYZ789', 'Ford', 'F-150', '11/20/2022', 1, NULL),
+(3, 'Honda', 'DEF456', 'Civic', '05/10/2022', 2, NULL),
+(4, 'GHI789', 'Chevrolet', 'Silverado', '02/10/2023', 2, NULL),
+(5, 'JKL012', 'Nissan', 'Altima', '10/08/2022', 3, NULL),
+(6, 'MNO345', 'Hyundai', 'Elantra', '03/25/2023', 3, NULL),
+(7, 'PQR678', 'Mazda', 'CX-5', '09/15/2022', 4, NULL),
+(8, 'STU901', 'Subaru', 'Outback', '04/12/2023', 4, NULL),
+(9, 'VWX234', 'Jeep', 'Wrangler', '11/30/2022', 5, NULL),
+(10, 'YZA567', 'Kia', 'Sorento', '01/22/2023', 5, NULL),
+(11, 'BCD890', 'Volkswagen', 'Jetta', '12/18/2022', 6, NULL),
+(12, 'EFG123', 'Audi', 'A4', '02/28/2023', 6, NULL),
+(13, 'HIJ456', 'BMW', 'X5', '10/05/2022', 7, NULL),
+(14, 'QRS345', 'Infiniti', 'Q50', '04/05/2023', 8, NULL),
+(17, '954WEF', 'Ford', 'Raptor', '12/14/2022', 9, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -217,7 +227,7 @@ ALTER TABLE `vehiculos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `piezas`
