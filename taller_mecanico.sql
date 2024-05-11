@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
+<<<<<<< HEAD
 -- Tiempo de generación: 11-05-2024 a las 20:11:47
+=======
+-- Tiempo de generación: 20-03-2024 a las 09:35:15
+>>>>>>> fe46bae2b1475f4526166b32946532b2ef761bb0
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,7 +37,10 @@ CREATE TABLE `clientes` (
   `APELLIDOP_CLIENTE` varchar(255) NOT NULL,
   `APELLIDOM_CLIENTE` varchar(255) NOT NULL,
   `ID_Usuario` int(10) DEFAULT NULL,
+<<<<<<< HEAD
   `fecha_registro` date NOT NULL DEFAULT current_timestamp(),
+=======
+>>>>>>> fe46bae2b1475f4526166b32946532b2ef761bb0
   `Imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -41,6 +48,7 @@ CREATE TABLE `clientes` (
 -- Volcado de datos para la tabla `clientes`
 --
 
+<<<<<<< HEAD
 INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`, `fecha_registro`, `Imagen`) VALUES
 (1, 'Ramiro', 'Lupercio', 'Coronel', 2, '2024-04-09', NULL),
 (2, 'Paco', 'Barrón', 'Gutierrez', 1, '2024-03-19', NULL),
@@ -52,6 +60,18 @@ INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `AP
 (8, 'El ', 'Javis', 'Palatras', 1, '2024-05-05', NULL),
 (9, 'Salma', 'Orozco', 'Castillo', 7, '2024-02-13', NULL),
 (10, 'Juan', 'L', 'L', 1, '2024-03-11', NULL);
+=======
+INSERT INTO `clientes` (`ID_CLIENTE`, `NOMBRE_CLIENTE`, `APELLIDOP_CLIENTE`, `APELLIDOM_CLIENTE`, `ID_Usuario`, `Imagen`) VALUES
+(1, 'Ramiro', 'Lupercio', 'Coronel', 2, NULL),
+(2, 'Paco', 'Barrón', 'Gutierrez', 1, NULL),
+(3, 'Julian', 'Rivera', 'Sanchez', 3, NULL),
+(4, 'Eric', 'Cortes', 'Ocampo', 4, NULL),
+(5, 'Thelma', 'Rodiguez', 'Soto', 2, NULL),
+(6, 'Palatras', 'Barron', 'Castro', 2, NULL),
+(7, 'Luis', 'Sanchez', 'Ochoa', 3, NULL),
+(8, 'El ', 'Javis', 'Palatras', 1, NULL),
+(9, 'Salma', 'Orozco', 'Castillo', 7, NULL);
+>>>>>>> fe46bae2b1475f4526166b32946532b2ef761bb0
 
 -- --------------------------------------------------------
 
@@ -227,7 +247,11 @@ ALTER TABLE `vehiculos`
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
+<<<<<<< HEAD
   MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+=======
+  MODIFY `ID_CLIENTE` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+>>>>>>> fe46bae2b1475f4526166b32946532b2ef761bb0
 
 --
 -- AUTO_INCREMENT de la tabla `piezas`
